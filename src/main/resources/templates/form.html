@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Form</title>
+</head>
+<body>
+<form th:form action="/category/index" th:object="product">
+    <label for="id">ID:</label>
+    <input type="text" id="id" th:field="*{id}" disabled><br>
+    <label for="name">Name:</label>
+    <input type="text" id="name" th:field="*{name}"><br>
+    <label for="image">Image:</label>
+    <input type="file" id="image" th:name="photo"><br>
+    <label for="price">Price:</label>
+    <input type="number" id="price" th:field="*{price}"><br>
+    <label for="createDate">Create Date:</label>
+    <input type="date" id="createDate" th:field="*{createDate}"><br>
+    <label for="available">Available:</label>
+    <input type="checkbox" id="available" th:field="*{available}"><br>
+    <label for="categoryId">Category:</label>
+    <select id="categoryId" th:field="*{category.id}">
+        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+    </select><br>
+    <button th:formaction="/category/create">Create</button>
+    <button th:formaction="/category/update">Update</button>
+    <a th:href="/category/delete/${item.id}">Delete</a>
+    <a th:href="/category/index">Reset</a>
+</form>
+</body>
+</html>

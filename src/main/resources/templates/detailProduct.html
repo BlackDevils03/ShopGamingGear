@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Detail</title>
+    <style>
+        .product-detail {
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .product-detail img {
+            width: 100%;
+        }
+
+        .product-detail h1 {
+            margin-top: 20px;
+        }
+
+        .product-detail p {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div th:object="${product}" style="display: flex; margin-top: 30px">
+    <div style="flex: 1;">
+        <img th:src="@{'/img/' + ${product.image}}" alt="Product Image" style="width: 500px; height: 300px;">
+    </div>
+    <div style="flex: 1;">
+        <h1 th:text="${product.name}"></h1>
+        <p th:text="'Price: ' + ${#numbers.formatInteger(product.price, 0, 'COMMA')} + ' VND'"></p>
+        <p th:text="'Create Date: ' + ${product.createDate}"></p>
+        <p th:text="'Category: ' + ${product.category.name}"></p>
+        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <form th:action="@{/home/addCartDetail/{id} (id = ${product.id})}" th:method="post">
+                <div class="text-center">
+                    Số lượng: <input type="number" th:name="qty" style="width:50px; height: 25px; margin-right: 10px;">
+                    <button class="btn btn-outline-dark mt-auto" type="submit"> Add Cart</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    // Define the checkCart function
+    function checkCart(event) {
+        // Get the value of the input field
+        var qty = event.target.querySelector('input[name="qty"]').value;
+
+        // Check if the value is less than or equal to 0
+        if (qty <= 0 || qty == null) {
+            // Show an alert
+            alert("Vui long nhap so duong va lon hon 0");
+        } else {
+            // Submit the form
+            event.target.submit();
+        }
+    }
+
+    // Get all form elements
+    var forms = document.querySelectorAll('form');
+
+    // Loop through all form elements
+    forms.forEach(function (form) {
+        // Add an event listener for the submit event
+        form.addEventListener('submit', function (event) {
+            // Prevent the default form submission
+            event.preventDefault();
+
+            // Call the checkCart function
+            checkCart(event);
+        });
+    });
+</script>
+</body>
+</html>
