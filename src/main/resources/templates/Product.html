@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <title>Add Product</title>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form label {
+            display: block;
+            margin-top: 4px;
+        }
+
+        form input,
+        form select {
+            width: 200px;
+            margin-top: 4px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            justify-content: center;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+            border: 1px solid #ddd;
+        }
+
+        .pagination li a:hover {
+            background-color: #ddd;
+        }
+
+        /*.pagination li a.active {*/
+        /*    background-color: #ddd;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<h1 style="text-align: center">Add Product</h1>
+<form th:action="@{/products/add}" th:object="${product}" method="post" enctype="multipart/form-data">
+    <label for="id">ID:</label>
+    <input type="text" id="id" th:field="*{id}" disabled><br>
+    <input type="hidden" th:field="*{id}">
+    <label for="name">Name:</label>
+    <input type="text" id="name" th:field="*{name}">
+    <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</label>
+    <br>
+    <label for="image">Image:</label>
+    <input type="file" id="image" th:name="photo">
+    <label th:if="${#fields.hasErrors('image')}" th:errors="*{image}">Image Error</label>
+    <br>
+    <label for="price">Price:</label>
+    <input type="number" id="price" th:field="*{price}">
+    <label th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error</label>
+    <br>
+    <label for="createDate">Create Date:</label>
+    <input type="date" id="createDate" th:field="*{createDate}">
+    <label th:if="${#fields.hasErrors('createDate')}" th:errors="*{createDate}">Create Date Error</label>
+    <br>
+    <label for="available">Available:</label>
+    <input type="checkbox" id="available" th:field="*{available}"><br>
+    <label for="categoryId">Category:</label>
+    <select id="categoryId" th:field="*{category.id}">
+        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+    </select><br>
+    <ul class="pagination">
+        <li>
+            <button type="submit"><a>Save</a></button>
+        </li>
+        <li>
+            <button type="reset"><a th:href="@{/products/view-add}">Reset</a></button>
+        </li>
+    </ul>
+</form>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th>Create Date</th>
+        <th>Category</th>
+    </tr>
+
+    <tr th:each="product : ${data}">
+        <td th:text="${product.name}"></td>
+        <td><img th:src="@{'/img/'+${product.image}}" alt="Product Image" style="width: 200px;height: 100px"></td>
+        <td th:text="${product.price}"></td>
+        <td th:text="${product.createDate}"></td>
+        <td th:text="${product.category.name}"></td>
+        <td th:text="${product.available == true ? 'Còn hàng':'Hết hàng'}"></td>
+        <td>
+            <button type="button"><a th:href="@{/products/update/{id}(id = ${product.id})}"> Edit</a></button>
+            <button type="button"><a th:href="@{/products/delete/{id}(id = ${product.id})}"> Delete</a></button>
+        </td>
+    </tr>
+</table>
+<ul class="pagination">
+    <li th:each="number : ${pageNumber}">
+        <a th:href="@{/products/getPage/{page} (page = ${number})}" th:text="${number} + 1"></a>
+        <!--           th:class="${number == pageNumber.get(number) ? 'active' : ''}"></a>-->
+    </li>
+</ul>
+</body>
+</html>

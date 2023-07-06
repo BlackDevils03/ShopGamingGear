@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+
+<!--<div th:replace="/fragments/header :: navbar"></div>-->
+
+<div class="container">
+    <div class="text-center" style="margin-top: 30px">
+        <h1>Giỏ Hàng</h1>
+    </div>
+    <div class="row" style="margin-top: 30px">
+        <div class="col-md-10">
+            <h3>Danh sách giỏ hàng:</h3>
+            <div class="panel-default well" th:each="order : ${cart}">
+                <form th:action="@{/cart/update/{id}(id = ${order.product.id})}" method="post">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img th:src="@{'/img/'+${order.product.image}}" alt="Product Image"
+                                     style="width: 200px;height: 100px">
+                            </div>
+                            <div class="col-md-6">
+                                <h3><a th:text="${order.product.name}">Title</a></h3>
+                                <input type="hidden" name="idOrder" th:value="${order.order.id}">
+                                <div th:inline="text">Price:
+                                    [[${#numbers.formatInteger(order.price, 0, 'COMMA')}]] VND
+                                </div>
+                                Quantity: <input th:name="qty" th:value="${order.quantity}" onblur="this.form.submit()"
+                                                 style="width:50px;">
+                            </div>
+                            <div class="col-md-3 ">
+                                <a th:href="@{/cart/delete/{id} (id = ${order.id})}">
+                                    <button type="button" class="btn btn-danger `" th:text="Remove">Remove</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <br>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <h2>Hóa Đơn</h2>
+            <h4 style="margin-top: 80px">Thành Tiền</h4>
+            <h5 th:inline="text" style="color: red;margin-top: 30px">
+                [[${#numbers.formatInteger(total, 0, 'COMMA')}]] VND
+            </h5>
+            <button onclick="showDialog()" style="margin-top: 30px" class="btn btn-primary">Tạo hóa đơn</button>
+
+            <div id="dialog" style="display: none;">
+                <form th:action="@{/cart/pay}" method="post">
+                    <label for="address">Địa chỉ:</label><br>
+                    <input type="text" id="address" name="address"><br>
+                    <input onclick="this.form.submit()" th:type="submit" style="margin-top: 20px">
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Define the checkCart function
+    function checkCart(event) {
+        // Get the value of the input field
+        var qty = event.target.querySelector('input[name="qty"]').value;
+
+        // Check if the value is less than or equal to 0
+        if (qty <= 0 || qty == null) {
+            // Show an alert
+            alert("Vui long nhap so duong va lon hon 0");
+        } else {
+            // Submit the form
+            event.target.submit();
+        }
+    }
+
+    // Get all form elements
+    var forms = document.querySelectorAll('form');
+
+    // Loop through all form elements
+    forms.forEach(function (form) {
+        // Add an event listener for the submit event
+        form.addEventListener('submit', function (event) {
+            // Prevent the default form submission
+            event.preventDefault();
+
+            // Call the checkCart function
+            checkCart(event);
+        });
+    });
+
+    function showDialog() {
+        document.getElementById("dialog").style.display = "block";
+    }
+</script>
+
+</body>

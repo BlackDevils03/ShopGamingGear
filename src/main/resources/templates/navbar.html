@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Shop Homepage - Start Bootstrap Template</title>
+    <!-- Favicon-->
+    <!--    <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>-->
+    <!-- Bootstrap icons-->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="styles.css" rel="stylesheet"/>
+    <style>
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            justify-content: center;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+            border: 1px solid #ddd;
+        }
+
+        .pagination li a:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="background-color: black">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" th:href="@{/home/view}">SHOP TAY CẦM</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/home/view}">Trang
+                    Chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                <li class="nav-item dropdown">
+                    <span class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                          data-bs-toggle="dropdown" aria-expanded="false">Quản lí</span>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{/accounts/view-add}">Quản lí tài khoản</a></li>
+                        <li><a class="dropdown-item" th:href="@{/order/history}">Thống kê</a></li>
+                        <li><a class="dropdown-item" th:href="@{/products/view-add}">Quản lí sản phẩm</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="d-flex" style="margin-left: 500px;border: white 1px" th:data-cart="${session.order}">
+                <button class="btn btn-outline-dark" type="submit" onclick="checkOrder(event)">
+                    <a th:href="@{/cart/view}">Cart</a>
+                    <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
+                </button>
+            </form>
+            <button class="btn btn-outline-dark" type="submit" style="margin-left: 20px">
+                <a th:href="@{/login}">LogOut</a>
+                <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
+            </button>
+<!--            <button class="btn btn-outline-dark" type="submit">-->
+<!--&lt;!&ndash;                <p>Full name: <span th:text="${session.getAttribute('account').fullname}"></span></p>&ndash;&gt;-->
+<!--            </button>-->
+        </div>
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var showAlert = /*[[${showAlert}]]*/ false;
+        if (showAlert) {
+            alert("bạn không có quyền truy cập chức năng này.");
+        }
+        /*]]>*/
+    </script>
+</nav>
+<script>
+    function checkOrder(event) {
+        // Lấy thông tin về session giỏ hàng từ thuộc tính data-cart của thẻ body
+        var cart = document.querySelector('form').dataset.cart;
+
+        // Kiểm tra xem session giỏ hàng đã được tạo hay chưa
+        if (!cart) {
+            // Hiển thị thông báo cho người dùng
+            alert("Vui lòng chọn sản phẩm");
+            event.preventDefault();
+        } else {
+            // Xử lý khi session giỏ hàng đã được tạo
+            var href = event.target.querySelector('a').href;
+
+            // Chuyển hướng đến đường link trong thẻ a
+            window.location.href = href;
+        }
+    }
+</script>
+</body>

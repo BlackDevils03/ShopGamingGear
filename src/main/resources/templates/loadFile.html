@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:if="${session.msg}">
+    <p class="text-center">[[${session.msg}]] </p>
+    <th:block th:text="${session.removeAttrbute('msg')}"></th:block>
+</th:block>
+ <div>
+   <form action="/products/add" method="post" enctype="multipart/form-data">
+        <div>
+            <input type="file" name="img" >
+        </div>
+       <div>
+           <button>Upload</button>
+       </div>
+   </form>
+     <div>
+
+     </div>
+ </div>
+</body>
+</html>

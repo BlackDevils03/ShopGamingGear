@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders</title>
+    <!-- Include the Chart.js library from a different CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<!--<canvas id="myChart"></canvas>-->
+
+<!--<script>-->
+<!--    // Get the chart data from the model-->
+<!--    var chartData = /*[[${chartData}]]*/ '[]';-->
+
+<!--    // Create the chart-->
+<!--    var ctx = document.getElementById('myChart').getContext('2d');-->
+<!--    var myChart = new Chart(ctx, {-->
+<!--        type: 'bar',-->
+<!--        data: {-->
+<!--            labels: chartData.map(function (item) {-->
+<!--                return item.orderDetails.product.name;-->
+<!--            }),-->
+<!--            datasets: [{-->
+<!--                label: 'Số lượng sản phẩm bán ra',-->
+<!--                data: chartData.map(function (item) {-->
+<!--                    return item.orderDetails.quantity;-->
+<!--                }),-->
+<!--                backgroundColor: 'rgba(54, 162, 235, 0.2)',-->
+<!--                borderColor: 'rgba(54, 162, 235, 1)',-->
+<!--                borderWidth: 1-->
+<!--            }]-->
+<!--        },-->
+<!--        options: {-->
+<!--            scales: {-->
+<!--                y: {-->
+<!--                    beginAtZero: true-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+
+
+<h1>Orders</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Create Date</th>
+        <th>Address</th>
+        <th>Status</th>
+        <th>Details</th>
+        <th>Total</th>
+    </tr>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.createDate}"></td>
+        <td th:text="${order.address}"></td>
+        <td th:text="${order.status}"></td>
+        <td>
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+                <tr th:each="detail : ${order.orderDetails}">
+                    <td th:text="${detail.product.name}"></td>
+                    <td><img class="card-img-top" th:src="@{'/img/'+ ${detail.product.image}}" style="width: 200px; height: 100px;" alt="..."/></td>
+                    <td th:text="${detail.price}"></td>
+                    <td th:text="${detail.quantity}"></td>
+                    <td>[[${#numbers.formatInteger(detail.quantity * detail.price, 0, 'COMMA')}]] VND</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<footer>
+    <form th:action="@{/order/sendMail}" th:method="post">
+        <input type="email" th:name="gmail" style="width: 150px;">
+        <button type="submit">Gửi</button>
+    </form>
+</footer>
+</body>
+</html>
